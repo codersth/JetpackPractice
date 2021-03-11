@@ -1,13 +1,17 @@
 package com.codersth.jetpackpractice.view.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.codersth.jetpackpractice.R
+import com.codersth.jetpackpractice.databinding.ActivityLoginBinding
 import com.codersth.jetpackpractice.viewmodel.LoginViewModel
 
 /**
@@ -20,39 +24,27 @@ import com.codersth.jetpackpractice.viewmodel.LoginViewModel
  */
 class LoginActivity : AppCompatActivity() {
 
+    companion object {
+        private const val DURATION_SIMULATE_REQUEST = 2000L
+    }
+
     /**
      * ViewModel to provide data for Views.
      */
     private lateinit var mLoginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        // Retrieve layout binding.
+        val binding: ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        // Bind binding's lifecycle to the current component.
+        binding.lifecycleOwner = this
         // instantiate ViewModel with its no-args constructor.
-        mLoginViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(LoginViewModel::class.java)
-        val nameView = findViewById<TextView>(R.id.name_et)
-        val passwordView = findViewById<TextView>(R.id.password_et)
-        // Observe name changes and display the changed value to View.
-        mLoginViewModel.name.observe(this, { name ->
-            nameView?.text = name
-        })
+        val loginViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(LoginViewModel::class.java)
+        binding.viewModel = loginViewModel
         // Load user for retrieving the latest changes which will change the name field.
-        mLoginViewModel.loadUser()
-        findViewById<View>(R.id.login_btn)?.setOnClickListener {
-            // Simple checking.
-            if(TextUtils.isEmpty(nameView.text) || TextUtils.isEmpty(passwordView.text)) {
-                Toast.makeText(this, "Invalid name or password(name = ${nameView.text}, password = ${passwordView.text}", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-            // Do Login Executing.
-            mLoginViewModel.login(nameView.text.toString(), passwordView.text.toString())
-        }
-        // Observe the login result and show corresponding message.
-        mLoginViewModel.loginResult.observe(this, { success ->
-            if(success) {
-                Toast.makeText(applicationContext, "login success", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(applicationContext, "login failed", Toast.LENGTH_LONG).show()
-            }
-        })
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            loginViewModel.loadUser()
+        }, DURATION_SIMULATE_REQUEST)
+        mLoginViewModel = loginViewModel
     }
 }

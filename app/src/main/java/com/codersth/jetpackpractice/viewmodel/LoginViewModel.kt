@@ -1,6 +1,7 @@
 package com.codersth.jetpackpractice.viewmodel
 
 import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlin.random.Random
@@ -19,7 +20,7 @@ class LoginViewModel: ViewModel() {
     /**
      * Simply define a string field to express Model.
      */
-    var name = MutableLiveData<String>()
+    var name = ObservableField<String>()
 
     /**
      * For caller to observe the login result.
@@ -28,7 +29,7 @@ class LoginViewModel: ViewModel() {
 
     fun loadUser() {
         // Just set a value directly, it may a complicated process in fact, that is, retrieve data from DB or the backend.
-        name.value = "Jetpack"
+        name.set("Jetpack")
     }
 
     fun login(name: String, password: String) {
