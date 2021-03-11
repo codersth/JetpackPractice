@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">JetpackPractice</string>
+    <string name="please_input_name">请输入姓名</string>
+    <string name="please_input_password">请输入密码</string>
+    <string name="login">登录</string>
+</resources>
