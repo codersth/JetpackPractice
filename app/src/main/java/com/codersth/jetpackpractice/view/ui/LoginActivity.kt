@@ -45,6 +45,14 @@ class LoginActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed(Runnable {
             loginViewModel.loadUser()
         }, DURATION_SIMULATE_REQUEST)
+        // Observe the login result and show corresponding message.
+        mLoginViewModel.loginResult.observe(this, { success ->
+            if(success) {
+                Toast.makeText(applicationContext, "login success", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(applicationContext, "login failed", Toast.LENGTH_LONG).show()
+            }
+        })
         mLoginViewModel = loginViewModel
     }
 }
