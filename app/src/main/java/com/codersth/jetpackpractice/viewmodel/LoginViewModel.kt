@@ -6,7 +6,9 @@ import android.widget.Toast
 import androidx.databinding.Bindable
 import androidx.lifecycle.MutableLiveData
 import com.codersth.jetpackpractice.BR
+import com.codersth.jetpackpractice.service.repository.UserRepository
 import com.codersth.jetpackpractice.util.ObservableViewModel
+import javax.inject.Inject
 import kotlin.random.Random
 
 /**
@@ -14,7 +16,7 @@ import kotlin.random.Random
  * @date 2021/3/9-16:14
  * @since V1.0.0
  */
-class LoginViewModel: ObservableViewModel() {
+class LoginViewModel @Inject constructor(private val repository: UserRepository): ObservableViewModel() {
 
     companion object {
         private const val TAG = "LoginViewModel"
